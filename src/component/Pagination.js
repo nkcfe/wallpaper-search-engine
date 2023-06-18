@@ -24,18 +24,42 @@ const PageSelect = styled.select`
     }
 `;
 
-const Pagination = () => {
+const Pagination = ({ page, setPage, numberOfPages }) => {
     return (
         <Nav>
-            <PrevIcon width="24" cursor="pointer" fill="var(--text)" />
-            {`총 10 중 `}
-            <PageSelect name="page">
-                <option value={1} key={1}>
-                    1
-                </option>
+            {/* page가 1이 아닐 경우에만 이전 버튼 표시 */}
+            {page !== 1 && (
+                <PrevIcon
+                    width="24"
+                    cursor="pointer"
+                    fill="var(--text)"
+                    onClick={() => setPage((prev) => prev - 1)}
+                />
+            )}
+            {`총 ${numberOfPages} 중 `}
+            <PageSelect
+                name="page"
+                value={page}
+                onChange={(e) => setPage(parseInt(e.target.value))}
+            >
+                {Array(numberOfPages)
+                    .fill()
+                    .map((data, idx) => (
+                        <option value={idx + 1} key={idx}>
+                            {idx + 1}
+                        </option>
+                    ))}
             </PageSelect>
             페이지
-            <NextIcon width="24" cursor="pointer" fill="var(--text)" />
+            {/* page가 25가 아닐 경우에만 다음 버튼 표시 */}
+            {page !== 25 && (
+                <NextIcon
+                    width="24"
+                    cursor="pointer"
+                    fill="var(--text)"
+                    onClick={() => setPage((prev) => prev + 1)}
+                />
+            )}
         </Nav>
     );
 };

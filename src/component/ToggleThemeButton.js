@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { ReactComponent as LightIcon } from '../asset/light.svg';
 import { ReactComponent as DarkIcon } from '../asset/dark.svg';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Button = styled.div`
     position: fixed;
@@ -23,11 +24,28 @@ const Button = styled.div`
 `;
 
 const ToggleThemeButton = () => {
-    const [theme, setTheme] = useState('light');
+    // localStorage에 저장된 값 가져오기
+    const initialTheme = localStorage.getItem('theme')
+        ? localStorage.getItem('theme')
+        : 'light';
+
+    // state로 테마 관리
+    const [theme, setTheme] = useState(initialTheme);
+
+    // 테마 버튼 클릭
     const toggleTheme = () => {
+        // set 설정
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
     };
+
+    // 테마가 바뀔경우 실행
+    useEffect(() => {
+        // html data 설정
+        document.documentElement.setAttribute('data-theme', theme);
+        // localStorage 설정
+        localStorage.setItem('theme', theme);
+    }, [theme]);
 
     return (
         <Button onClick={toggleTheme}>
